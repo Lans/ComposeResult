@@ -1,0 +1,5 @@
+jdk:
+  - openjdk17
+install:
+  # 明确告知 JitPack 运行这个命令来生成发布产物
+  - ./gradlew :composeresult-core:publishToMavenLocal

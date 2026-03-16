@@ -38,10 +38,27 @@ android {
             withSourcesJar()
         }
     }
+
+
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.compose.runtime.saveable)
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                // 关键点：从 Android 的 release 组件获取产物
+                from(components["release"])
+
+                groupId = "com.github.lans"
+                artifactId = "composeResult"
+                version = "1.0.1"
+            }
+        }
+    }
 }
