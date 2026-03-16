@@ -1,0 +1,2 @@
+-keepnames class * implements java.io.Serializable
+-keepnames class * implements android.os.Parcelable
