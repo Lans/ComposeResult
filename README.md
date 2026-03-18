@@ -17,6 +17,8 @@
 
 ## 📦 安装指南
 
+最新版本：[![Maven Central](https://img.shields.io/maven-central/v/io.github.lans/compose-result.svg)](https://central.sonatype.com/artifact/io.github.lans/compose-result)
+
 ### 1. 添加仓库 (settings.gradle.kts)
 
 ```kotlin
