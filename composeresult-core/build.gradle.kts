@@ -37,11 +37,11 @@ android {
 //
 //    发布到 maven { url = uri("https://jitpack.io") }
 //
-//    publishing {
-//        singleVariant("release") {
-//            withSourcesJar()
-//        }
-//    }
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 
 
 }
@@ -53,53 +53,53 @@ dependencies {
 }
 
 // 发布到 maven { url = uri("https://jitpack.io") }
-//afterEvaluate {
-//    publishing {
-//        publications {
-//            register<MavenPublication>("release") {
-//                // 关键点：从 Android 的 release 组件获取产物
-//                from(components["release"])
-//
-//                groupId = "com.github.lans"
-//                artifactId = "composeResult"
-//                version = "1.0.1"
-//            }
-//        }
-//    }
-//}
+afterEvaluate {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                // 关键点：从 Android 的 release 组件获取产物
+                from(components["release"])
 
-// 发布到 mavenCentral()
-mavenPublishing {
-    coordinates("io.github.lans", "composeResult", "1.0.1")
-
-    pom {
-        name = "ComposeResult"
-        description = "ComposeResult 是一个专为 Jetpack Compose 打造的轻量级、响应式页面通信库。它利用 CompositionLocal 和 rememberSaveable 实现了跨页面的状态共享与结果回传，优雅地取代了繁琐的 SavedStateHandle 方案。"
-        url = "https://github.com/Lans/ComposeResult"
-
-        // 开源协议配置，可根据需要修改
-        licenses {
-            license {
-                name = "The Apache License, Version 2.0"
-                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                groupId = "io.github.lans"
+                artifactId = "composeResult"
+                version = "1.0.2"
             }
-        }
-
-        developers {
-            developer {
-                id = "lans"
-                name = "lans"
-                email = "wylans@163.com"
-            }
-        }
-
-        scm {
-            connection = "scm:git:github.com/Lans/ComposeResult.git"
-            developerConnection = "scm:git:ssh://github.com/Lans/ComposeResult.git"
-            url = "https://github.com/Lans/ComposeResult"
         }
     }
-
-    publishToMavenCentral()
-    signAllPublications()
 }
+
+// 发布到 mavenCentral()
+//mavenPublishing {
+//    coordinates("io.github.lans", "composeResult", "1.0.1")
+//
+//    pom {
+//        name = "ComposeResult"
+//        description = "ComposeResult 是一个专为 Jetpack Compose 打造的轻量级、响应式页面通信库。它利用 CompositionLocal 和 rememberSaveable 实现了跨页面的状态共享与结果回传，优雅地取代了繁琐的 SavedStateHandle 方案。"
+//        url = "https://github.com/Lans/ComposeResult"
+//
+//        // 开源协议配置，可根据需要修改
+//        licenses {
+//            license {
+//                name = "The Apache License, Version 2.0"
+//                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+//            }
+//        }
+//
+//        developers {
+//            developer {
+//                id = "lans"
+//                name = "lans"
+//                email = "wylans@163.com"
+//            }
+//        }
+//
+//        scm {
+//            connection = "scm:git:github.com/Lans/ComposeResult.git"
+//            developerConnection = "scm:git:ssh://github.com/Lans/ComposeResult.git"
+//            url = "https://github.com/Lans/ComposeResult"
+//        }
+//    }
+//
+//    publishToMavenCentral()
+//    signAllPublications()
+//}
