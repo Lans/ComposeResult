@@ -41,12 +41,12 @@ android {
 //
 //    发布到 maven { url = uri("https://jitpack.io") }
 //
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-            withJavadocJar()
-        }
-    }
+//    publishing {
+//        singleVariant("release") {
+//            withSourcesJar()
+//            withJavadocJar()
+//        }
+//    }
 
 
 }
