@@ -24,7 +24,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://jitpack.io") }
     }
 }
 
@@ -34,7 +33,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("com.github.Lans:ComposeResult:1.0.1")
+    implementation("io.github.lans:compose-result:1.0.1")
 }
 
 ```
