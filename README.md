@@ -35,7 +35,7 @@ dependencyResolutionManagement {
 
 ```kotlin
 dependencies {
-    implementation("io.github.lans:compose-result:1.0.1")
+    implementation("io.github.lans:compose-result:1.1.2")
 }
 
 ```
@@ -155,6 +155,112 @@ fun Nav3Demo() {
 ```
 
 ---
+
+既然 `snapshotFlow` 的时机和 `Hilt` 的注入都已经跑通了，现在的 `ResultStore` 已经进化成了一个**全链路响应式状态总线**。
+
+在 `README.md` 中，我们需要清晰地展示这种“ViewModel 发送 -> 全局存储 -> UI/ViewModel 响应”的闭环能力。
+
+---
+
+## 📘 ResultStore 官方文档：Hilt 进阶指南
+
+### 1. 注入配置 (Hilt Module)
+首先，在你的 Hilt Module 中将 `ResultStore` 声明为单例，确保全应用共享同一个存储源。
+
+```kotlin
+@Module
+@InstallIn(SingletonComponent::class)
+object ResultModule {
+    @Provides
+    @Singleton
+    fun provideResultStore(): ResultStore = ResultStore()
+}
+```
+
+### 2. 绑定到 Activity
+在 `EntryPoint` Activity 中，通过 `ResultStoreProvider` 将单例注入到 Compose 上下文。
+
+```kotlin
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
+    @Inject lateinit var globalStore: ResultStore
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            // 传入 globalStore 实例，禁用内部的 rememberSaveable 以配合 Hilt 生命周期
+            ResultStoreProvider(store = globalStore) {
+                MainAppNavHost()
+            }
+        }
+    }
+}
+```
+
+### 3. ViewModel 层的发送与监听
+这是 `ResultStore` 最强大的地方：**业务逻辑层与 UI 层的无感联动。**
+
+
+
+```kotlin
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val resultStore: ResultStore
+) : ViewModel() {
+
+    init {
+        // 在 ViewModel 中“监听”全局 ResultStore 的变动
+        snapshotFlow { resultStore.allResults().toMap() }
+            .filter { resultStore.hasTag<String>("user_name") }
+            .onEach {
+                // 比如：一旦某个特定的 Key 发生变化，立即上报埋点或同步数据库
+                val name = resultStore.getResult<String>("user_name")
+                reportLoginEvent(name)
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun reportLoginEvent(name: String?) {
+        Log.e("TAG", "reportLoginEvent $name ")
+    }
+
+}
+```
+
+### 4. UI 层响应
+在 Composable 中，你只需要像使用 `LiveData` 或 `State` 一样观察即可：
+
+```kotlin
+@Composable
+fun ProfileScreen() {
+    // 自动获取全局唯一的 Store
+    val store = LocalResultStore.current
+    
+    // 响应式状态：当 LoginViewModel 调用 setResult 时，这里会自动重组
+    val userName by store.getResultAsState<String>("user_name")
+
+    Text(text = "欢迎回来: ${userName ?: "游客"}")
+}
+```
+
+---
+
+### 🚀 核心优势总结
+* **解耦**：发送方（LoginViewModel）完全不需要知道接收方（ProfileScreen）的存在。
+* **一致性**：通过 `toMap()` 监听，确保即使数据值改变但 Map 大小未变，也能精准触发监听。
+* **灵活消费**：支持 `getResultAsState`（持续观察）和 `consumeResult`（阅后即焚）。
+
+---
+
+### 🎨 给你的小建议
+
+| 功能 | 纯 Compose 模式 | Hilt / 扩展模式 |
+| :--- | :--- | :--- |
+| **状态恢复** | `rememberSaveable` 自动恢复 | 随单例/ViewModel 存活 |
+| **跨页面通信** | ✅ 支持 | ✅ 支持 |
+| **ViewModel 监听** | ❌ 不建议 | ✅ 完美支持 (`snapshotFlow`) |
+| **配置复杂度** | 极低 (0 配置) | 低 (需配置 Module) |
+
 
 ## ⚠️ 注意事项
 
