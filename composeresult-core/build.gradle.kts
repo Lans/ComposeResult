@@ -8,7 +8,7 @@ plugins {
 
 // 必须在顶级作用域定义，确保 JitPack 能正确读取 GroupId
 group = "io.github.lans"
-version = "1.1.1"
+version = "1.1.2"
 
 android {
     namespace = "com.lans.composeresult.core"
