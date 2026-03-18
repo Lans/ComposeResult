@@ -38,17 +38,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-//
-//    发布到 maven { url = uri("https://jitpack.io") }
-//
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-            withJavadocJar()
-        }
-    }
-
-
 }
 
 dependencies {
@@ -57,54 +46,38 @@ dependencies {
     implementation(libs.androidx.compose.runtime.saveable)
 }
 
-// 发布到 maven { url = uri("https://jitpack.io") }
-afterEvaluate {
-    publishing {
-        publications {
-            register<MavenPublication>("release") {
-                // 关键点：从 Android 的 release 组件获取产物
-                from(components["release"])
+//发布到 mavenCentral()
+mavenPublishing {
+    coordinates(group.toString(), "compose-result", version.toString())
 
-                groupId = "io.github.lans"
-                artifactId = "composeResult"
-                version = "1.0.6"
+    pom {
+        name = "ComposeResult"
+        description = "ComposeResult 是一个专为 Jetpack Compose 打造的轻量级、响应式页面通信库。它利用 CompositionLocal 和 rememberSaveable 实现了跨页面的状态共享与结果回传，优雅地取代了繁琐的 SavedStateHandle 方案。"
+        url = "https://github.com/Lans/ComposeResult"
+
+        // 开源协议配置，可根据需要修改
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
             }
         }
-    }
-}
 
-// 发布到 mavenCentral()
-//mavenPublishing {
-//    coordinates(group.toString(), "compose-result", version.toString())
-//
-//    pom {
-//        name = "ComposeResult"
-//        description = "ComposeResult 是一个专为 Jetpack Compose 打造的轻量级、响应式页面通信库。它利用 CompositionLocal 和 rememberSaveable 实现了跨页面的状态共享与结果回传，优雅地取代了繁琐的 SavedStateHandle 方案。"
-//        url = "https://github.com/Lans/ComposeResult"
-//
-//        // 开源协议配置，可根据需要修改
-//        licenses {
-//            license {
-//                name = "The Apache License, Version 2.0"
-//                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-//            }
-//        }
-//
-//        developers {
-//            developer {
-//                id = "lans"
-//                name = "lans"
-//                email = "wylans@163.com"
-//            }
-//        }
-//
-//        scm {
-//            connection = "scm:git:github.com/Lans/ComposeResult.git"
-//            developerConnection = "scm:git:ssh://github.com/Lans/ComposeResult.git"
-//            url = "https://github.com/Lans/ComposeResult"
-//        }
-//    }
-//
-//    publishToMavenCentral()
-//    signAllPublications()
-//}
+        developers {
+            developer {
+                id = "lans"
+                name = "lans"
+                email = "wylans@163.com"
+            }
+        }
+
+        scm {
+            connection = "scm:git:github.com/Lans/ComposeResult.git"
+            developerConnection = "scm:git:ssh://github.com/Lans/ComposeResult.git"
+            url = "https://github.com/Lans/ComposeResult"
+        }
+    }
+
+    publishToMavenCentral()
+    signAllPublications()
+}
