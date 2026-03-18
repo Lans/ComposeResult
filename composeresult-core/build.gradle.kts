@@ -58,20 +58,20 @@ dependencies {
 }
 
 // 发布到 maven { url = uri("https://jitpack.io") }
-//afterEvaluate {
-//    publishing {
-//        publications {
-//            register<MavenPublication>("release") {
-//                // 关键点：从 Android 的 release 组件获取产物
-//                from(components["release"])
-//
-//                groupId = "io.github.lans"
-//                artifactId = "composeResult"
-//                version = "1.0.2"
-//            }
-//        }
-//    }
-//}
+afterEvaluate {
+    publishing {
+        publications {
+            register<MavenPublication>("release") {
+                // 关键点：从 Android 的 release 组件获取产物
+                from(components["release"])
+
+                groupId = "io.github.lans"
+                artifactId = "composeResult"
+                version = "1.0.6"
+            }
+        }
+    }
+}
 
 // 发布到 mavenCentral()
 //mavenPublishing {
