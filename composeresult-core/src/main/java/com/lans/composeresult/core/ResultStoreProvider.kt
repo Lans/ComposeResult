@@ -23,9 +23,14 @@ fun ResultStoreProvider(
     // 逻辑：
     // 1. 如果外部提供了 store (单例)，则直接使用，不开启内部 saveable (由单例自行处理或生命周期管理)
     // 2. 如果外部未提供，则创建一个基于 rememberSaveable 的自动恢复实例
-    val finalStore = store ?: rememberSaveable(
-        saver = Saver(save = { it.dump() }, restore = { ResultStore(it) })
-    ) { ResultStore() }
+    val finalStore = if (store != null) {
+        // 模式 A：外部注入（Hilt/Koin），生命周期随单例，不参与 Bundle 序列化
+        store
+    } else {
+        rememberSaveable(
+            saver = Saver(save = { it.dump() }, restore = { ResultStore(it) })
+        ) { ResultStore() }
+    }
     CompositionLocalProvider(LocalResultStore provides finalStore) {
         content()
     }
