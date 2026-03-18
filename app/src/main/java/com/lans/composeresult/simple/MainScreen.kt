@@ -1,4 +1,4 @@
-package com.lans.composeresult
+package com.lans.composeresult.simple
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

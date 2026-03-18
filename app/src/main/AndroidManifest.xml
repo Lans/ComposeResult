@@ -4,6 +4,7 @@
 
     <application
         android:allowBackup="true"
+        android:name=".hilt.simple.App"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -11,6 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ComposeResult">
+        <activity
+            android:name=".hilt.simple.HiltMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".simple.SimpleActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
