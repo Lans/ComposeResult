@@ -67,6 +67,23 @@ class ResultStore(
      */
     fun dump(): Map<String, Any?> = _resultStateMap.toMap()
 
+    /**
+     * 检查是否存在指定类型的指定 Tag
+     */
+    inline fun <reified T> hasTag(tag: String): Boolean {
+        return _resultStateMap.containsKey(makeKey<T>(tag))
+    }
+
+    /**
+     * 获取原始存储 Map (ReadOnly)
+     */
+    fun allResults(): Map<String, Any?> = _resultStateMap
+
+
+    inline fun <reified T> getResult(tag: String = ""): T? {
+        return _resultStateMap[makeKey<T>(tag)] as? T
+    }
+
     @PublishedApi
     internal inline fun <reified T> makeKey(tag: String) = "${T::class.java.name}_$tag"
 }

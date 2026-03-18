@@ -28,7 +28,10 @@ fun ResultStoreProvider(
         store
     } else {
         rememberSaveable(
-            saver = Saver(save = { it.dump() }, restore = { ResultStore(it) })
+            saver = Saver<ResultStore, HashMap<String, Any?>>(
+                save = { HashMap(it.dump()) },
+                restore = { ResultStore(it) }
+            )
         ) { ResultStore() }
     }
     CompositionLocalProvider(LocalResultStore provides finalStore) {
